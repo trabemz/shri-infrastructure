@@ -18,4 +18,4 @@ jobs:
 
       - name: Create task in tracker
         run: |
-          sh "${GITHUB_WORKSPACE}/.github/create-task.sh"
+          sh ./create-task.sh"
