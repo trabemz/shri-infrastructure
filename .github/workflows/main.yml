@@ -18,5 +18,4 @@ jobs:
 
       - name: Create task in tracker
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echmod +x "${GITHUB_WORKSPACE}/.github/create-task.sh"
