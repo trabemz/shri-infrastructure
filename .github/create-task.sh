@@ -10,5 +10,6 @@ ReleaseDate=`git rev-parse ${CurrentGitTag} | xargs git cat-file -p | awk '/^tag
 echo "Release date: " $ReleaseDate
 ReleaseCreator=`git rev-parse ${CurrentGitTag} | xargs git cat-file -p | awk '/^tagger/ { print $2 " " $3 " " $4 }'`
 echo "Release author: " $ReleaseCreator
-GitLog=`git log ${PreviousGitTag}..${CurrentGitTag} --pretty=tformat:"%h; author: %cn; date: %cs; subject:%s ||" | awk '||'`
+GitLog=`git log ${PreviousGitTag}..${CurrentGitTag} --pretty=tformat:"%h; author: %cn; date: %cs; subject:%s %n"`
+
 echo $GitLog 
