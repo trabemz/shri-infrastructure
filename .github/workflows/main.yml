@@ -18,4 +18,4 @@ jobs:
 
       - name: Create task in tracker
         run: |
-          echmod +x "${GITHUB_WORKSPACE}/.github/create-task.sh"
+          sh "${GITHUB_WORKSPACE}/.github/create-task.sh"
