@@ -18,6 +18,6 @@ jobs:
 
       - name: Create task in tracker
         run: |
-          chmod +x ./create-task.sh
-          ./create-task.sh
+          chmod +x ./.github/create-task.sh
+          ./.github/create-task.sh
         shell: bash
