@@ -6,6 +6,6 @@ COPY . .
 
 RUN npm ci 
 
-RUN npm run builld 
+RUN npm run build 
 
 CMD npm start 
