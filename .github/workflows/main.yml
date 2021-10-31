@@ -34,7 +34,7 @@ jobs:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
 
-      - name: Build image
+      - name: Build docker image
         run: sh ./.github/docker.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}

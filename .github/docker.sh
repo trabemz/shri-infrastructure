@@ -1,13 +1,17 @@
 #! /usr/bin/bash
-
-image="shri-infrastructure"
+CurrentGitTag=$(git tag | sort -r | head -1)
+image="shri-infrastructure-$CurrentGitTag"
 
 docker build . -f Dockerfile -t ${image}
 
 if [ $? -ne 0 ]
 then
-    echo "ERROR with create docker image"
+    result="!!ERROR with create docker image!!"
     exit 1
 else
-    echo "Create docker image: ${image}"
+    result="Created docker image: ${image}"
 fi
+
+echo $result
+
+./.github/utils/createComment.sh "$result"
