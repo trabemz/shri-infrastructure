@@ -21,3 +21,17 @@ jobs:
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
+
+      - name: Run tests
+        run: sh ./.github/tests.sh
+        env:
+          OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
+          OrganizationId: ${{ secrets.ORGANIZATION_ID}}
+      
+      - name: Build image
+        run: sh ./.github/docker.sh
+        env:
+          OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
+          OrganizationId: ${{ secrets.ORGANIZATION_ID}}
+      
+      
