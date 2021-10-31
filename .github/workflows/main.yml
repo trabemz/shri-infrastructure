@@ -17,22 +17,25 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Create task in tracker
         run: sh ./.github/create-task.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
 
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Run tests
         run: sh ./.github/tests.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
-      
+
       - name: Build image
         run: sh ./.github/docker.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
-      
-      

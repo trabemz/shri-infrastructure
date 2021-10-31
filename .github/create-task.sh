@@ -9,7 +9,7 @@ echo "Current tag: " $CurrentGitTag
 echo "Previous tag: " $PreviousGitTag
 
 ReleaseDate=`git show $CurrentGitTag --pretty=format:"%as" --no-patch | tr -s "\n" " "`
-ReleaseAuthor=`git show $CurrentGitTag --pretty=format:"%an ae" --no-patch | tr -s "\n" " "`
+ReleaseAuthor=`git show $CurrentGitTag --pretty=format:"%an %ae" --no-patch | tr -s "\n" " "`
 GitLog=`git log ${PreviousGitTag}..${CurrentGitTag} --pretty=format:"\n* %h (%cs) %s - %cn %ce;" | tr -s "\n" " "`
 
 
