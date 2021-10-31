@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Create task in tracker
-        run: sh ./.github/create-task.sh
+        run: bash ./.github/create-task.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
@@ -29,13 +29,13 @@ jobs:
           node-version: '14'
 
       - name: Run tests
-        run: sh ./.github/tests.sh
+        run: bash ./.github/tests.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
 
       - name: Build docker image
-        run: sh ./.github/docker.sh
+        run: bash ./.github/docker.sh
         env:
           OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
           OrganizationId: ${{ secrets.ORGANIZATION_ID}}
