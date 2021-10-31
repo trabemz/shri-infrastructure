@@ -1,8 +1,4 @@
 #!/bin/bash
-#to delete
-OAuth='AQAAAAAQ8JwBAAd4kUjZvmm85E5pm1Pjfx_wZn4'
-OrganizationId='6461097'
-
 
 #git info
 echo "Getting information from git..."
