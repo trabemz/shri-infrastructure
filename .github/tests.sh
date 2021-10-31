@@ -11,4 +11,5 @@ fi
 
 echo $result
 
+chmod +x ./.github/utils/createComment.sh
 ./.github/utils/createComment.sh "$result"
