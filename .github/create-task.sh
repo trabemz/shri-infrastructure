@@ -8,13 +8,14 @@ PreviousGitTag=$(git tag | sort -r | head -2 | tail -1)
 echo "Current tag: " $CurrentGitTag
 echo "Previous tag: " $PreviousGitTag
 
-Release=`git show $CurrentGitTag --pretty=format:"%as" --no-patch | tr -s "\n" " "`
+ReleaseDate=`git show $CurrentGitTag --pretty=format:"%as" --no-patch | tr -s "\n" " "`
+ReleaseAuthor=`git show $CurrentGitTag --pretty=format:"%an ae" --no-patch | tr -s "\n" " "`
 GitLog=`git log ${PreviousGitTag}..${CurrentGitTag} --pretty=format:"\n* %h (%cs) %s - %cn %ce;" | tr -s "\n" " "`
 
 
 Summary="Release ${CurrentGitTag}"
 echo "Title: $Summary"
-Description="Release: ${Release}\nChangelog:\n${GitLog}" 
+Description="Release Date: ${ReleaseDate}\nRelease Author: ${ReleaseAuthor}\nChangelog:\n${GitLog}" 
 echo "Description: $Description"
 Unique="trabemz_shri-infrastructure_${CurrentGitTag}"
 echo "Unique identifier: $Unique"
