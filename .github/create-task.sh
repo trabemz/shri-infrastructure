@@ -32,7 +32,7 @@ DataRaw='{
         "unique": "'"${Unique}"'"
     }'
 
-responseCodeCreate=$(curl -o /dev/null -s -w "%{http_code}" --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
+responseCodeCreate=$(curl --silent  -o /dev/null -s -w "%{http_code}" --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
 --header "Authorization: OAuth $OAuth" \
 --header "X-Org-ID: $OrganizationId" \
 --header "Content-Type: application/json" \
@@ -44,7 +44,7 @@ then
   echo 'Updating task in tracker...'
 
   #Get task update link
-  IssueUrl=$(curl --location --request POST 'https://api.tracker.yandex.net/v2/issues/_search' \
+  IssueUrl=$(curl --silent --location --request POST 'https://api.tracker.yandex.net/v2/issues/_search' \
   --header "Authorization: OAuth $OAuth" \
   --header "X-Org-ID: $OrganizationId" \
   --header "Content-Type: application/json" \
@@ -57,7 +57,7 @@ then
   echo "Task Url: $IssueUrl"
 
   #Update task
-  responseCodeUpdate=$(curl -o /dev/null -s -w "%{http_code}" --location --request PATCH "$IssueUrl" \
+  responseCodeUpdate=$(curl --silent  -o /dev/null -s -w "%{http_code}" --location --request PATCH "$IssueUrl" \
   --header "Authorization: OAuth $OAuth" \
   --header "X-Org-ID: $OrganizationId" \
   --header "Content-Type: application/json" \
@@ -67,7 +67,7 @@ then
   then echo "Task updated successfully!" 
   else 
     echo "Update return code $responseCodeUpdate"
-    responseUpdate=$(curl --location --request PATCH "$IssueUrl" \
+    responseUpdate=$(curl --silent  --location --request PATCH "$IssueUrl" \
     --header "Authorization: OAuth $OAuth" \
     --header "X-Org-ID: $OrganizationId" \
     --header "Content-Type: application/json" \
@@ -80,7 +80,7 @@ else
   then echo "Task created successfully!" 
   else 
     echo "Create return code $responseCodeCreate"
-    responseCreate=$(curl --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
+    responseCreate=$(curl --silent  --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
     --header "Authorization: OAuth $OAuth" \
     --header "X-Org-ID: $OrganizationId" \
     --header "Content-Type: application/json" \
