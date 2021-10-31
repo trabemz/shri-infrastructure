@@ -1,27 +1,30 @@
 #!/bin/bash
+#to delete
+OAuth='AQAAAAAQ8JwBAAd4kUjZvmm85E5pm1Pjfx_wZn4'
+OrganizationId='6461097'
+
 
 #git info
 echo "Getting information from git..."
-PreviousAndCurrentGitTag=`git describe --tags \`git rev-list --tags --abbrev=0 --max-count=2\` --abbrev=0`
-PreviousGitTag=`echo $PreviousAndCurrentGitTag | cut -f 2 -d ' '`
-CurrentGitTag=`echo $PreviousAndCurrentGitTag | cut -f 1 -d ' '`
+CurrentGitTag=$(git tag | sort -r | head -1)
+PreviousGitTag=$(git tag | sort -r | head -2 | tail -1)
 
 echo "Current tag: " $CurrentGitTag
 echo "Previous tag: " $PreviousGitTag
 
 Release=`git show $CurrentGitTag --pretty=format:"%as" --no-patch | tr -s "\n" " "`
 GitLog=`git log ${PreviousGitTag}..${CurrentGitTag} --pretty=format:"\n* %h (%cs) %s - %cn %ce;" | tr -s "\n" " "`
-echo $GitLog
-echo $Release
+
+
+Summary="Release ${CurrentGitTag}"
+echo "Title: $Summary"
+Description="Release: ${Release}\nChangelog:\n${GitLog}" 
+echo "Description: $Description"
+Unique="trabemz_shri-infrastructure_${CurrentGitTag}"
+echo "Unique identifier: $Unique"
+
 #create task in tracker
 echo "Creating task in tracker..."
-Summary="Release ${CurrentGitTag}"
-echo $Summary
-Description="Release: ${Release}\nChangelog:\n${GitLog}" 
-echo $Description
-Unique="trabemz_shri-infrastructure_${CurrentGitTag}"
-echo $Unique
-
 DataRaw='{
         "queue": "TMP",
         "summary": "'"${Summary}"'",
@@ -29,15 +32,13 @@ DataRaw='{
         "unique": "'"${Unique}"'"
     }'
 
-responseCode=$(curl -o /dev/null -s -w "%{http_code}" --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
+responseCodeCreate=$(curl -o /dev/null -s -w "%{http_code}" --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
 --header "Authorization: OAuth $OAuth" \
 --header "X-Org-ID: $OrganizationId" \
 --header "Content-Type: application/json" \
 --data-raw "$DataRaw"
 )
-echo $responseCode
-
-if [ "$responseCode" = 409 ]
+if [ "$responseCodeCreate" = 409 ]
 then 
   echo 'The task was created in the tracker earlier.'
   echo 'Updating task in tracker...'
@@ -53,7 +54,7 @@ then
     }
   }' | awk -F '"self":"' '{ print $2 }' | awk -F '","' '{ print $1 }'
   )
-  echo $IssueUrl
+  echo "Task Url: $IssueUrl"
 
   #Update task
   responseCodeUpdate=$(curl -o /dev/null -s -w "%{http_code}" --location --request PATCH "$IssueUrl" \
@@ -62,11 +63,29 @@ then
   --header "Content-Type: application/json" \
   --data-raw "$DataRaw"
   )
-
-  echo $responseCodeUpdate
   if [ "$responseCodeUpdate" = 200 ]
   then echo "Task updated successfully!" 
-  else echo "Update return code $responseCodeUpdate"
+  else 
+    echo "Update return code $responseCodeUpdate"
+    responseUpdate=$(curl --location --request PATCH "$IssueUrl" \
+    --header "Authorization: OAuth $OAuth" \
+    --header "X-Org-ID: $OrganizationId" \
+    --header "Content-Type: application/json" \
+    --data-raw "$DataRaw"
+    )
+    echo responseUpdate
   fi
-else echo "Task created successfully!" 
+else 
+  if [ "$responseCodeCreate" = 201 ]
+  then echo "Task created successfully!" 
+  else 
+    echo "Create return code $responseCodeCreate"
+    responseCreate=$(curl --location --request POST 'https://api.tracker.yandex.net/v2/issues/' \
+    --header "Authorization: OAuth $OAuth" \
+    --header "X-Org-ID: $OrganizationId" \
+    --header "Content-Type: application/json" \
+    --data-raw "$DataRaw"
+    )
+    echo $responseCreate
+  fi
 fi
