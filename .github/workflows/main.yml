@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Create task in tracker
-        run: |
-          chmod +x ./.github/create-task.sh
-          ./.github/create-task.sh
-        shell: bash
+        run: sh ./.github/create-task.sh
+        env:
+          OAuth: ${{ secrets.TRACKER_ACCESS_TOKEN }}
+          OrganizationId: ${{ secrets.ORGANIZATION_ID}}
